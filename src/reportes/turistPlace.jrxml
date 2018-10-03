@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="turistPlace" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="42c6acc8-f83d-4cd2-81cd-9839c659861e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="7"/>
+	<parameter name="id_Depto" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     activity.`activity_id` AS activity_activity_id,
+     activity.`name` AS activity_name,
+     activity.`town_id` AS activity_town_id,
+     activity.`type_id` AS activity_type_id,
+     tourist_place.`tourist_place_id` AS tourist_place_tourist_place_id,
+     tourist_place.`id_town` AS tourist_place_id_town,
+     tourist_place.`name` AS tourist_place_name,
+     tourist_place.`place_type_id` AS tourist_place_place_type_id,
+     town.`town_id` AS town_town_id,
+     town.`name` AS town_name,
+     town.`id_dep` AS town_id_dep,
+     departaments.`id_dept` AS departaments_id_dept,
+     departaments.`departament_name` AS departaments_departament_name
+FROM
+     `town` town INNER JOIN `activity` activity ON town.`town_id` = activity.`town_id`
+     INNER JOIN `tourist_place` tourist_place ON town.`town_id` = tourist_place.`id_town`
+     INNER JOIN `departaments` departaments ON town.`id_dep` = departaments.`id_dept`
+WHERE
+     id_dep = $P!{id_Depto}]]>
+	</queryString>
+	<field name="activity_activity_id" class="java.lang.Integer"/>
+	<field name="activity_name" class="java.lang.String"/>
+	<field name="activity_town_id" class="java.lang.Integer"/>
+	<field name="activity_type_id" class="java.lang.Integer"/>
+	<field name="tourist_place_tourist_place_id" class="java.lang.Integer"/>
+	<field name="tourist_place_id_town" class="java.lang.Integer"/>
+	<field name="tourist_place_name" class="java.lang.String"/>
+	<field name="tourist_place_place_type_id" class="java.lang.Integer"/>
+	<field name="town_town_id" class="java.lang.Integer"/>
+	<field name="town_name" class="java.lang.String"/>
+	<field name="town_id_dep" class="java.lang.Integer"/>
+	<field name="departaments_id_dept" class="java.lang.Integer"/>
+	<field name="departaments_departament_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="472" y="35" width="100" height="20" uuid="212659f4-e653-4351-93c2-0018b1a43fee"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="228" y="35" width="100" height="20" uuid="80180681-8db1-4c38-a917-ed8884bd4442"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Tourist Place]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="158" y="2" width="100" height="20" uuid="a89cb210-2716-4b9f-ad7e-30d7ffe58a6a"/>
+				<text><![CDATA[activity_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="316" y="0" width="100" height="20" uuid="d3a540a1-922e-47c7-bdd9-a4c398175c67"/>
+				<text><![CDATA[tourist_place_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="461" y="0" width="100" height="20" uuid="6eb8eb11-ea55-4766-b5ac-356fe59619f3"/>
+				<text><![CDATA[town_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="2" width="100" height="20" uuid="62ae672a-6475-4d5b-a53a-3003bf8a5ba9"/>
+				<text><![CDATA[departaments_departament_name]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="158" y="44" width="100" height="20" uuid="52bc2330-e3a1-48ac-90cd-b1f558762f03"/>
+				<textFieldExpression><![CDATA[$F{activity_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="44" width="100" height="20" uuid="78a02470-9451-402c-8fa7-e4fdf155337b"/>
+				<textFieldExpression><![CDATA[$F{tourist_place_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="461" y="44" width="100" height="20" uuid="64344448-6be3-46ab-a046-c52605e97d77"/>
+				<textFieldExpression><![CDATA[$F{town_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="44" width="100" height="20" uuid="5814d297-2d98-4c41-a12c-fbe980f11d61"/>
+				<textFieldExpression><![CDATA[$F{departaments_departament_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="428" y="0" width="80" height="20" uuid="15dd0627-c257-41e9-b69b-913cfab61469"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="508" y="0" width="40" height="20" uuid="40ef7de6-bed8-4d11-9688-0ab5d572b390"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

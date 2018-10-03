@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Departamentos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="57e5424a-3675-4c03-aa9b-32b6864e1869">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="codigociudad" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     town.`town_id` AS town_town_id,
+     town.`name` AS town_name,
+     town.`id_dep` AS town_id_dep,
+     departaments.`departament_name` AS departaments_departament_name,
+     departaments.`id_dept` AS departaments_id_dept
+FROM
+     `departaments` departaments INNER JOIN `town` town ON departaments.`id_dept` = town.`id_dep`
+WHERE  town.`id_dep` = $P!{codigociudad}]]>
+	</queryString>
+	<field name="town_town_id" class="java.lang.Integer"/>
+	<field name="town_name" class="java.lang.String"/>
+	<field name="town_id_dep" class="java.lang.Integer"/>
+	<field name="departaments_departament_name" class="java.lang.String"/>
+	<field name="departaments_id_dept" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="193" y="26" width="254" height="20" uuid="ddd977a1-9dc9-4bdd-a937-be37204e565d"/>
+				<textElement>
+					<font fontName="SansSerif" size="14"/>
+				</textElement>
+				<text><![CDATA[Reporte de departamentos]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="472" y="6" width="100" height="20" uuid="c91befda-99da-4c0b-b882-4255dd1c026c"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="4" width="100" height="20" uuid="9663d917-e3f0-40ab-9838-e8affcb5cd8b"/>
+				<text><![CDATA[town_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="2" width="100" height="20" uuid="c2ab240d-86bf-47fa-91d6-494643b14349"/>
+				<text><![CDATA[departaments_departament_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="2" width="100" height="20" uuid="7c9eb60d-6d4f-41de-b527-4f4511f0dbdd"/>
+				<text><![CDATA[town_id_dep]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="100" height="20" uuid="b88a814e-5afb-4295-aac4-c3648136af48"/>
+				<textFieldExpression><![CDATA[$F{town_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="155" y="10" width="100" height="20" uuid="4564f8d6-ef5b-4210-9762-57289e75a3ba"/>
+				<textFieldExpression><![CDATA[$F{departaments_departament_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="335" y="10" width="100" height="20" uuid="0110c2f5-086f-4cb8-9f1d-724812efe511"/>
+				<textFieldExpression><![CDATA[$F{town_id_dep}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="442" y="34" width="80" height="20" uuid="22dbfdd4-a775-4a39-8276-2d737f824087"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="522" y="33" width="40" height="20" uuid="41a43a6d-bedb-4ccf-9647-5c395ed0260f"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
