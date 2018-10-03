@@ -13,7 +13,7 @@ import vista.Principal;
 
 /**
  *
- * @author sergio
+ * @author sergio hurtarte
  */
 public class ProyectoIntecap {
 
