@@ -10,8 +10,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Departaments;
+import modelo.DepartamentsDao;
 import modelo.Town;
 
 import modelo.TownDao;
@@ -27,6 +30,9 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
     JintFrmTown town = new JintFrmTown();
     TownDao townDao = new TownDao();
     Town modelo = new Town();
+    ArrayList<Departaments> listaDeptos = new ArrayList<>(); //datos departamentos
+
+    ArrayList<Town> listaMunicipios = new ArrayList<Town>();
 
     public ControladorTown(JintFrmTown vistaTown, TownDao modeloTown) {
         this.town = vistaTown;
@@ -36,10 +42,14 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
         this.town.jBtnActualizar.addActionListener(this);
         this.town.jBtnEliminar.addActionListener(this);
         this.town.jBtnLimpiar.addActionListener(this);
-
+        
         this.town.jTblTipoCuenta.addMouseListener(this);
+        this.town.jCmbDept.addActionListener(this);
+        this.town.jTxtDepto.setEnabled(false);
+        this.town.jTxtName.setEnabled(true);
 
         cargarDatosTown();
+        llenarCmbDeptos();
 
     }
 
@@ -51,30 +61,63 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
 
         //asignar titulos a las columnas
         modelotabla.addColumn("Id");
-        modelotabla.addColumn("Name");
-        modelotabla.addColumn("Id_Depto");
+        modelotabla.addColumn("Dept Name");
+        modelotabla.addColumn("Town Name");
 
-        ArrayList<Town> lista = new ArrayList();
         //obtener la lista de tipos de cuenta
-        lista = townDao.listaTown();
+        int numRegistros = townDao.listaTownView().size();
         //object
         Object[] valorColumna = new Object[3];
 
-        for (int i = 0; i < lista.size(); i++) {
-            valorColumna[0] = lista.get(i).getTown_id();
-            valorColumna[1] = lista.get(i).getName();
-            valorColumna[2] = lista.get(i).getId_dep();
+        for (int i = 0; i < numRegistros; i++) {
+
+            valorColumna[0] = townDao.listaTownView().get(i).getTownId();
+            valorColumna[1] = townDao.listaTownView().get(i).getDeptName();
+            valorColumna[2] = townDao.listaTownView().get(i).getTownName();
             //permite agregar filas
             modelotabla.addRow(valorColumna);
         }
 
     }
 
+    public void llenarCmbDeptos() {
+        DepartamentsDao daocompo = new DepartamentsDao();
+        DefaultComboBoxModel dc = new DefaultComboBoxModel();
+
+        listaDeptos = daocompo.listaDepartamentos();
+        this.town.jCmbDept.setModel(dc);
+        for (int i = 0; i < listaDeptos.size(); i++) {
+            dc.addElement(listaDeptos.get(i).getDepartament_name());
+
+        }
+
+    }
+
+    public void llenarCmbMunicipios() {
+
+        TownDao municipios = new TownDao();
+        DefaultComboBoxModel defaultDepartmen = new DefaultComboBoxModel();
+
+        //buscar el codigo del departamento para listar los municipios
+        int codigoDepto = 0;
+        for (int i = 0; i < listaDeptos.size(); i++) {
+            if (listaDeptos.get(i).getDepartament_name().equals(this.town.jCmbDept.getSelectedItem())) {
+                codigoDepto = listaDeptos.get(i).getId_dept();
+
+                this.town.jTxtDepto.setText(String.valueOf(codigoDepto));
+            }
+        }
+        
+
+    }
+
+    
+
     public void guardarTown() {
         Town townPrincipal = new Town();
         townPrincipal.setTown_id(Integer.parseInt(town.jTxtTown.getText()));
-        townPrincipal.setName(town.jTxtName.getText());
         townPrincipal.setId_dep(Integer.parseInt(town.jTxtDepto.getText()));
+        townPrincipal.setName(town.jTxtName.getText());
         String respuesta = townDao.registrarTown(townPrincipal);
         if (respuesta != null) {
 
@@ -101,8 +144,8 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
         }
 
     }
-    
-      public void eliminarTown() {
+
+    public void eliminarTown() {
         Town townPrincipal = new Town();
         townPrincipal.setTown_id(Integer.parseInt(town.jTxtTown.getText()));
 
@@ -115,16 +158,28 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
             JOptionPane.showMessageDialog(null, respuesta);
         }
     }
-      
-        public void limpiarTown() {
+//Cambio git 1/2
+
+    public void mouseClickedDeptos() {
+
+        String nombredepto = this.town.jTblTipoCuenta.getValueAt(this.town.jTblTipoCuenta.getSelectedRow(), 1).toString();
+        //seleccionar departamento
+        for (int i = 0; i < listaDeptos.size(); i++) {
+            this.town.jCmbDept.setSelectedItem(nombredepto);
+        }
+
+        //seleccionar el municipio
+        
+
+    }
+
+    public void limpiarTown() {
         town.jTxtTown.setText(null);
         town.jTxtName.setText(null);
         town.jTxtDepto.setText(null);
         town.jTxtTown.requestFocus();
 
     }
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -140,18 +195,22 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
             cargarDatosTown();
 
         }
-        
-        if(e.getSource()==town.jBtnEliminar){
-            
+
+        if (e.getSource() == town.jBtnEliminar) {
+
             eliminarTown();
             cargarDatosTown();
-            
+
         }
-        
-        if(e.getSource()==town.jBtnLimpiar){
+
+        if (e.getSource() == town.jBtnLimpiar) {
             limpiarTown();
-            
+
         }
+        if (e.getSource() == town.jCmbDept) {
+            llenarCmbMunicipios();
+        }
+       
 
     }
 
@@ -159,9 +218,10 @@ public class ControladorTown extends MouseAdapter implements ActionListener {
     public void mouseClicked(MouseEvent me) {
         if (me.getSource() == town.jTblTipoCuenta) {
             town.jTxtTown.setText(town.jTblTipoCuenta.getValueAt(town.jTblTipoCuenta.getSelectedRow(), 0).toString());
-            town.jTxtName.setText(town.jTblTipoCuenta.getValueAt(town.jTblTipoCuenta.getSelectedRow(), 1).toString());
-            town.jTxtDepto.setText(town.jTblTipoCuenta.getValueAt(town.jTblTipoCuenta.getSelectedRow(), 2).toString());
 
+            mouseClickedDeptos();
+                town.jTxtName.setText(town.jTblTipoCuenta.getValueAt(town.jTblTipoCuenta.getSelectedRow(), 2).toString());
+            
         }
 
     }

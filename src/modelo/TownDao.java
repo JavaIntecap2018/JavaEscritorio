@@ -137,6 +137,33 @@ public class TownDao extends Conexion{
          
         return place;
     }
+      // nuevo metodo para la vitaTown
+      public ArrayList<VistaTown> listaTownView() {
+        ArrayList<VistaTown> lista = null;
+        ResultSet resultado;
+        try {
+            this.Conectar();
+            sql = "select * from vw_towns order by town_id";
+            ejecutar = this.getMiconexion().prepareStatement(sql);
+            resultado = ejecutar.executeQuery();
+            lista = new ArrayList();
+            while (resultado.next()) {
+               VistaTown vistaTown = new VistaTown();
+                vistaTown.setTownId(resultado.getInt("town_id"));
+                  vistaTown.setTownName(resultado.getString("town_name"));
+                  vistaTown.setDeptName(resultado.getString("departament_name"));
+                  vistaTown.setIdDept(resultado.getInt("id_dept"));
+                
+
+                lista.add(vistaTown);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        } finally {
+            this.cerrarConex();
+        }
+        return lista;
+    }
      
       //BUSCAR DATOS
     public ArrayList<Town> listaTownDep(int idDepto) {

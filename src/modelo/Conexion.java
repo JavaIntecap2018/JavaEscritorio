@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class Conexion {
      public Connection miconexion;
-    private static final String URL = "jdbc:mysql://localhost:3306/guatemala2";
+    private static final String URL = "jdbc:mysql://localhost:3306/guatemala";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
